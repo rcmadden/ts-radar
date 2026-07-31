@@ -76,27 +76,37 @@
   .impact-maybe{background:rgba(212,167,44,.2);color:#e3b341}
   footer{padding:14px 28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border)}
 
-  /* Responsive: collapsible controls on small screens */
-  .controls{flex-wrap:wrap;gap:8px}
-  .ctrl-group{flex:1 1 auto;min-width:0}
-  .collapsible-toggle{display:none}
+  /* Responsive: mobile-friendly layout */
   @media (max-width: 900px) {
-    .controls{position:static !important}
-    thead th{top:0 !important}
-    header{padding:14px 16px;position:sticky;top:0;z-index:20}
-    .controls{padding:10px 16px;gap:8px;max-height:none}
-    .ctrl-group{flex:1 1 45%;min-width:120px}
-    .search{min-width:100%;flex-basis:100%}
-    main{padding:0 12px 40px}
-    .stats{padding:8px 16px}
-    thead th{top:0}
-    .reconcile{padding:10px 16px}
-    .reconcile-grid{gap:8px}
-    .ver-card{min-width:140px;flex:1 1 45%}
-    .topbar{flex-wrap:wrap;gap:6px}
+    /* All full-width bars use same horizontal padding */
+    header, .navbar, .controls, .stats, .reconcile, footer {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    main { padding: 0 16px 40px; }
+    /* Disable sticky to reclaim vertical space */
+    .controls, .stats { position: static !important; }
+    thead th { top: 0 !important; }
+    .controls { flex-wrap: wrap; gap: 8px; }
+    .ctrl-group { flex: 1 1 45%; min-width: 120px; }
+    .search { min-width: 100%; flex-basis: 100%; }
+    .reconcile-grid { gap: 8px; }
+    .ver-card { min-width: 140px; flex: 1 1 45%; }
+    .topbar { flex-wrap: wrap; gap: 6px; }
   }
   @media (max-width: 600px) {
-    header{position:static !important}
+    header, .navbar { position: static !important; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .ctrl-group { flex: 1 1 100%; }
+    .chip-row { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+    table { font-size: 12px; }
+    td, th { padding: 6px 8px; }
+    .note { display: none; }
+    .ver-card { flex: 1 1 100%; }
+    .summary { font-size: 11px; }
+    .env { font-size: 11px; }
+    .sub { font-size: 12px; }
+  }
     .navbar{position:static !important}
     .controls{flex-direction:column;align-items:stretch}
     .ctrl-group{flex:1 1 100%}
@@ -282,6 +292,7 @@ function renderReconcile(){
     const all=KNOWN_ISSUES.filter(i=>affectsVersion(i,v.prefix));
     const open=all.filter(i=>i.statusType==="open");
     const fixed=all.filter(i=>i.statusType==="fixed");
+    const closed=all.filter(i=>i.statusType==="closed");
     const card=document.createElement("div");
     card.className="ver-card "+v.cls;
     const openStatus=open.length>0?'<span class="ver-status status-open">'+open.length+' open</span>':'<span class="ver-status status-fixed">No open issues</span>';
@@ -290,7 +301,7 @@ function renderReconcile(){
       '<div>'+openStatus+'</div>'+
       '<div class="ver-count open-count">'+open.length+'</div>'+
       '<div class="ver-label">open known issues</div>'+
-      '<div style="margin-top:6px"><span class="fixed-count" style="font-weight:600">'+fixed.length+' fixed</span> · '+all.length+' total</div>';
+      '<div style="margin-top:6px"><span class="fixed-count" style="font-weight:600">'+fixed.length+' fixed</span> · <span style="color:var(--muted)">'+closed.length+' closed</span> · '+all.length+' total</div>';
     grid.appendChild(card);
   });
 }

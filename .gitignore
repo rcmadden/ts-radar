@@ -1,0 +1,17 @@
+# Raw data (large, derived)
+data/known-issues-raw.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary scraper output
+data/*-new.js
+/tmp/

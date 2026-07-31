@@ -75,6 +75,38 @@
   .impact-yes{background:rgba(218,54,51,.2);color:#ff7b72}
   .impact-maybe{background:rgba(212,167,44,.2);color:#e3b341}
   footer{padding:14px 28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border)}
+
+  /* Responsive: collapsible controls on small screens */
+  .controls{flex-wrap:wrap;gap:8px}
+  .ctrl-group{flex:1 1 auto;min-width:0}
+  .collapsible-toggle{display:none}
+  @media (max-width: 900px) {
+    .controls{position:static !important}
+    thead th{top:0 !important}
+    header{padding:14px 16px;position:sticky;top:0;z-index:20}
+    .controls{padding:10px 16px;gap:8px;max-height:none}
+    .ctrl-group{flex:1 1 45%;min-width:120px}
+    .search{min-width:100%;flex-basis:100%}
+    main{padding:0 12px 40px}
+    .stats{padding:8px 16px}
+    thead th{top:0}
+    .reconcile{padding:10px 16px}
+    .reconcile-grid{gap:8px}
+    .ver-card{min-width:140px;flex:1 1 45%}
+    .topbar{flex-wrap:wrap;gap:6px}
+  }
+  @media (max-width: 600px) {
+    header{position:static !important}
+    .navbar{position:static !important}
+    .controls{flex-direction:column;align-items:stretch}
+    .ctrl-group{flex:1 1 100%}
+    .chip-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+    table{font-size:12px}
+    td,th{padding:6px 8px}
+    .note{display:none}
+    .ver-card{flex:1 1 100%}
+    .summary{font-size:11px}
+  }
 </style>
 </head>
 <body>
@@ -142,7 +174,7 @@
   Source: help.salesforce.com/s/issues (Tableau Server category, 1001 known issues via Coveo API). "Found In Release" indicates where the issue was first reported; it may affect later versions unless marked fixed. Generated <span id="gen"></span>.
 </footer>
 
-<script id="dataline"><script src="data/known-issues.js"></script>
+<script src="data/known-issues.js"></script>
 <script>
 let curStatuses=new Set(["open"]), curImpact="all", curVer="all", q="", curSort="reports";
 

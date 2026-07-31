@@ -10,10 +10,16 @@
     --text:#e6edf3; --muted:#8b949e; --accent:#4f9cf9; --accent2:#2d7d46;
     --crit:#da3633; --high:#e8743c; --mod:#d4a72c; --low:#6e7681; --excl:#3b4047;
     --s1:#4f9cf9; --s3:#a371f7;
+    --navbar-h:43px;
+    --controls-h:80px;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
-  header{padding:18px 28px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:20}
+  .navbar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--panel2);position:sticky;top:0;z-index:30;width:100%}
+  .navbar a{padding:10px 20px;font-size:13px;text-decoration:none;white-space:nowrap}
+  .navbar a.active{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+  .navbar a:not(.active){color:var(--muted)}
+  header{padding:18px 28px;border-bottom:1px solid var(--border);background:var(--panel);width:100%}
   h1{margin:0 0 4px;font-size:20px;font-weight:600}
   .sub{color:var(--muted);font-size:13px;margin:0}
   .env{color:var(--accent);font-size:12px;margin-top:6px}
@@ -23,7 +29,7 @@
   .btn.danger{border-color:var(--crit);color:#ff7b72}
   .btn.danger:hover{background:rgba(218,54,51,.12)}
 
-  .controls{padding:14px 28px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;position:sticky;top:116px;z-index:15}
+  .controls{padding:14px 28px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;position:sticky;top:var(--navbar-h);z-index:15;width:100%}
   .ctrl-group{display:flex;flex-direction:column;gap:5px}
   .ctrl-group>label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
   .search{padding:7px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;min-width:260px}
@@ -42,10 +48,10 @@
   .sevchip-low.active{background:var(--low);border-color:var(--low)}
   .sevchip-excluded.active{background:var(--excl);border-color:var(--excl)}
   .tagchip.active{background:var(--accent2);border-color:var(--accent2)}
-  .stats{padding:10px 28px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border);background:var(--panel2)}
+  .stats{padding:10px 28px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border);background:var(--panel2);width:100%}
   main{padding:0 28px 60px}
   table{width:100%;border-collapse:collapse}
-  thead th{position:sticky;top:175px;background:var(--panel);text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);z-index:10}
+  thead th{position:sticky;top:calc(var(--navbar-h) + var(--controls-h));background:var(--panel);text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);z-index:10}
   tbody td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
   tbody tr:hover{background:var(--panel)}
   .sev{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
@@ -70,7 +76,7 @@
   .seriesbadge{font-size:10px;padding:1px 6px;border-radius:8px;margin-left:5px;font-weight:600}
   .sb-2025_1{background:rgba(79,156,249,.15);color:var(--s1)}
   .sb-2025_3{background:rgba(163,113,247,.15);color:var(--s3)}
-  footer{padding:14px 28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border)}
+  footer{padding:14px 28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);width:100%}
 
   /* Exclusions modal */
   .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:100;display:none;justify-content:center;align-items:flex-start;padding:40px 20px;overflow-y:auto}
@@ -95,8 +101,8 @@
 
   /* Responsive: mobile-friendly layout */
   @media (max-width: 900px) {
-    /* All full-width bars use same horizontal padding */
-    header, .navbar, .controls, .stats, .reconcile, footer {
+    /* Consistent horizontal padding for all full-width bars */
+    header, .navbar, .controls, .stats, footer {
       padding-left: 16px;
       padding-right: 16px;
     }
@@ -104,11 +110,10 @@
     /* Disable sticky to reclaim vertical space */
     .controls, .stats { position: static !important; }
     thead th { top: 0 !important; }
+    .controls { top: 0 !important; }
     .controls { flex-wrap: wrap; gap: 8px; }
     .ctrl-group { flex: 1 1 45%; min-width: 120px; }
     .search { min-width: 100%; flex-basis: 100%; }
-    .reconcile-grid { gap: 8px; }
-    .ver-card { min-width: 140px; flex: 1 1 45%; }
     .topbar { flex-wrap: wrap; gap: 6px; }
   }
   @media (max-width: 600px) {
@@ -119,7 +124,6 @@
     table { font-size: 12px; }
     td, th { padding: 6px 8px; }
     .note { display: none; }
-    .ver-card { flex: 1 1 100%; }
     .summary { font-size: 11px; }
     .env { font-size: 11px; }
     .sub { font-size: 12px; }
@@ -137,9 +141,9 @@
 </style>
 </head>
 <body>
-<div style="display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--panel2)">
-  <a href="index.html" style="padding:10px 20px;color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;border-bottom:2px solid var(--accent)">Resolved Issues</a>
-  <a href="known-issues.html" style="padding:10px 20px;color:var(--muted);font-size:13px;text-decoration:none">Known Issues</a>
+<div class="navbar">
+  <a href="index.html" class="active">Resolved Issues</a>
+  <a href="known-issues.html">Known Issues</a>
 </div>
 <header>
   <h1>Tableau Server — Release Gap Dashboard</h1>

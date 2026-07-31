@@ -203,4 +203,55 @@ if (failures.length > 0) {
   console.error('\nFailures:');
   failures.forEach(f => console.error(`  - ${f}`));
 }
+
+// ---- Test CSS layout integrity ----
+console.log('\n=== CSS Layout Integrity ===');
+
+for (const [name, html] of [['index.html', indexHtml], ['known-issues.html', kiHtml]]) {
+  // All full-width bar elements must have width:100%
+  ['header', '.controls', '.stats', 'footer'].forEach(el => {
+    const pat = el.replace('.', '\\.');
+    const cssBlock = html.match(new RegExp(pat + '\\{[^}]+\\}'));
+    if (cssBlock) {
+      assert(cssBlock[0].includes('width:100%'), name + ': ' + el + ' has width:100%');
+    }
+  });
+
+  // index.html navbar must use class, not inline styles
+  if (name === 'index.html') {
+    assert(!html.includes('style="display:flex;gap:0;border-bottom'), name + ': navbar uses class not inline styles');
+    assert(html.includes('class="navbar"'), name + ': navbar has class="navbar"');
+    assert(html.includes('.navbar{'), name + ': .navbar CSS rule exists');
+  }
+
+  // .controls sticky top must not be bare 0 (would overlap navbar)
+  const controlsCSS = html.match(/\.controls\{[^}]+\}/);
+  if (controlsCSS && controlsCSS[0].includes('position:sticky')) {
+    const hasVarTop = controlsCSS[0].includes('top:var(');
+    const hasZeroTop = controlsCSS[0].includes('top:0') && !hasVarTop;
+    assert(!hasZeroTop, name + ': .controls sticky top is not bare 0 (uses variable to avoid navbar overlap)');
+  }
+
+  // CSS variables for sticky heights
+  assert(html.includes('--navbar-h:'), name + ': has --navbar-h CSS variable');
+
+  // Responsive: all bar elements in 900px media query
+  const media900 = html.substring(html.indexOf('@media (max-width: 900px)'), html.indexOf('@media (max-width: 600px)'));
+  ['header', '.controls', '.stats', 'footer', '.navbar'].forEach(el => {
+    assert(media900.includes(el), name + ': 900px breakpoint includes ' + el + ' padding override');
+  });
+}
+
+// ---- Navbar consistency between pages ----
+console.log('\n=== Navbar Consistency ===');
+assert(indexHtml.includes('.navbar{') && kiHtml.includes('.navbar{'), 'Both pages have .navbar CSS class');
+assert(indexHtml.includes('class="navbar"') && kiHtml.includes('class="navbar"'), 'Both pages use class="navbar"');
+assert(indexHtml.includes('href="known-issues.html"') && kiHtml.includes('href="index.html"'), 'Both pages link to each other');
+
+// ---- Summary ----
+console.log('\n=== Results: ' + passed + ' passed, ' + failed + ' failed ===');
+if (failures.length > 0) {
+  console.error('\nFailures:');
+  failures.forEach(f => console.error('  - ' + f));
+}
 process.exit(failed > 0 ? 1 : 0);

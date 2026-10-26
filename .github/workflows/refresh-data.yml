@@ -1,0 +1,83 @@
+name: refresh-data
+
+on:
+  schedule:
+    - cron: "0 18 15 * *"     # middle of the month
+    - cron: "0 18 28-31 * *"  # guarded below to the actual last day
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine refresh day
+        id: guard
+        run: |
+          day=$(date -u +%-d)
+          tomorrow=$(date -u -d '+1 day' +%-d)
+          if [ "$day" = "15" ] || [ "$tomorrow" = "1" ]; then
+            echo "refresh=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read current version
+        if: steps.guard.outputs.refresh == 'true' || github.event_name == 'workflow_dispatch'
+        id: version
+        run: |
+          node -e '
+            const fs = require("fs");
+            const config = new Function(fs.readFileSync("data/config.js", "utf8") + ";return RADAR_CONFIG")();
+            console.log("current=" + config.currentVersion);
+            console.log("series=" + config.currentVersion.split(".").slice(0, 2).join("."));
+            console.log("envNotes=" + (config.envNotes || ""));
+          ' >> "$GITHUB_OUTPUT"
+
+      - name: Scrape resolved issues and merge
+        if: steps.guard.outputs.refresh == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          ua="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+          page=$(curl -fsSL -A "$ua" https://www.tableau.com/support/releases/server)
+          series=$(echo "$page" | grep -o 'support/releases/server/[0-9][0-9]*\.[0-9][0-9]*' \
+            | sed 's|support/releases/server/||' | sort -u | awk -F. -v c="${{ steps.version.outputs.series }}" \
+            'split(c,a,"."); $1 > a[1] || ($1 == a[1] && $2 >= a[2])' | tr '\n' ' ')
+          echo "Series in scope: $series"
+          node scripts/fetch-resolved-issues.js $series --output data/resolved-issues-new.js --catalog data/releases-new.js
+          node scripts/merge-resolved-issues.js data/resolved-issues.js data/resolved-issues-new.js \
+            --min-series "${{ steps.version.outputs.series }}" \
+            --current-version "${{ steps.version.outputs.current }}"
+          mv data/releases-new.js data/releases.js
+
+      - name: Fetch known issues
+        if: steps.guard.outputs.refresh == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          KI_TOKEN: ${{ secrets.KI_TOKEN }}
+          ENV_NOTES: ${{ steps.version.outputs.envNotes }}
+        run: |
+          python3 scripts/fetch-known-issues.py \
+            --min-version "${{ steps.version.outputs.series }}" \
+            --current-version "${{ steps.version.outputs.current }}" \
+            --env-notes "$ENV_NOTES" \
+          || echo "::warning::Known issues fetch failed; previous data retained"
+
+      - name: Fetch security advisories
+        if: steps.guard.outputs.refresh == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          python3 scripts/fetch-security-issues.py \
+          || echo "::warning::Security refresh failed; previous data retained"
+
+      - name: Commit refreshed data
+        if: steps.guard.outputs.refresh == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "ts-radar-bot"
+          git config user.email "actions@github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes"
+          else
+            git commit -m "Auto-refresh data $(date -u +%F)"
+            git push
+          fi

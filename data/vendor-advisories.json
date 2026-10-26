@@ -1,0 +1,36 @@
+[
+  {
+    "id": "CVE-2026-111943",
+    "name": "CVE-2026-111943",
+    "source": "Tableau security notification + NVD",
+    "title": "CVE-2026-111943 — Compromised intermediate certificates in Tableau Server",
+    "summary": "Tableau's security notification reports compromised intermediate certificates from a third-party certificate authority. Update operating system certificates on every Server node first, then install the latest October 2026 release for your Server series. If upgrading is not possible, or the release is earlier than 2025.1, request Tableau Technical Support's remediation script. On Linux, disable the affected certificates in /etc/ca-certificates.conf and update the system trust store using IT or OS vendor guidance.",
+    "status": "Vendor security notification; remediation required",
+    "statusType": "open",
+    "foundIn": "Server releases before the October 2026 updates",
+    "allVersions": ["2025.1", "2025.3", "2026.2"],
+    "affectedRanges": [
+      {"endExcluding": "2025.1"},
+      {"startIncluding": "2025.1", "endExcluding": "2025.1.21"},
+      {"startIncluding": "2025.3", "endExcluding": "2025.3.11"},
+      {"startIncluding": "2026.2", "endExcluding": "2026.2.4"}
+    ],
+    "fixedVersions": ["2025.1.21", "2025.3.11", "2026.2.4", "2026.3"],
+    "requiredAction": "OS certificate updates are required on every node even after the Server update. The dashboard tracks Server build coverage; it does not verify OS trust stores or whether the support script was applied.",
+    "fixLabel": "Server patched",
+    "reports": 0,
+    "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-111943",
+    "evidence": {
+      "source": "Tableau security notification supplied by the portal administrator",
+      "verifiedOn": "2026-10-26",
+      "mapping": "The notification recommends the latest October 2026 release for each series. The listed Server releases were verified as published October 23, 2026.",
+      "upstreamProduct": "Go standard library crypto/x509; NVD does not enumerate Tableau Server builds"
+    },
+    "references": [
+      "https://www.tableau.com/support/releases/server/2025.1.21",
+      "https://www.tableau.com/support/releases/server/2025.3.11",
+      "https://www.tableau.com/support/releases/server/2026.2.4",
+      "https://www.tableau.com/support/releases/server/2026.3"
+    ]
+  }
+]

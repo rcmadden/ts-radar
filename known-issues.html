@@ -10,72 +10,74 @@
     --text:#e6edf3; --muted:#8b949e; --accent:#4f9cf9; --accent2:#2d7d46;
     --crit:#da3633; --high:#e8743c; --mod:#d4a72c; --low:#6e7681;
     --open:#da3633; --fixed:#2d7d46; --closed:#6e7681;
-    --s1:#4f9cf9; --s3:#a371f7; --s6:#f9a825;
+    --s4:#56d364; --s1:#4f9cf9; --s3:#a371f7; --s6:#f9a825;
     --navbar-h:43px;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:18px;line-height:1.5}
   .navbar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--panel2);position:sticky;top:0;z-index:30;width:100%}
-  .navbar a{padding:10px 20px;font-size:13px;text-decoration:none}
+  .navbar a{padding:10px 20px;font-size:16px;text-decoration:none}
   .navbar a.active{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
   .navbar a:not(.active){color:var(--muted)}
   header{padding:18px 28px;border-bottom:1px solid var(--border);background:var(--panel);width:100%}
-  h1{margin:0 0 4px;font-size:20px;font-weight:600}
-  .sub{color:var(--muted);font-size:13px;margin:0}
-  .env{color:var(--accent);font-size:12px;margin-top:6px}
+  h1{margin:0 0 4px;font-size:24px;font-weight:600}
+  .sub{color:var(--muted);font-size:16px;margin:0}
+  .env{color:var(--accent);font-size:14px;margin-top:6px}
   .controls{padding:14px 28px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;width:100%}
   .ctrl-group{display:flex;flex-direction:column;gap:5px}
-  .ctrl-group>label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-  .search{padding:7px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;min-width:260px}
+  .ctrl-group>label{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .search{padding:7px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;min-width:260px}
   .search:focus{outline:none;border-color:var(--accent)}
-  select{padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;cursor:pointer}
+  select{padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;cursor:pointer}
   select:focus{outline:none;border-color:var(--accent)}
   .chip-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
-  .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;border:1px solid var(--border);background:var(--panel2);color:var(--muted);font-size:12px;cursor:pointer;user-select:none;transition:all .12s;line-height:1.3}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel2);color:var(--muted);font-size:14px;cursor:pointer;user-select:none;transition:all .12s;line-height:1.3}
   .chip:hover{border-color:var(--accent);color:var(--text)}
   .chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
   .chip.st-open.active{background:var(--open);border-color:var(--open)}
   .chip.st-fixed.active{background:var(--fixed);border-color:var(--fixed)}
   .chip.st-closed.active{background:var(--closed);border-color:var(--closed)}
-  .stats{padding:10px 28px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border);background:var(--panel2);width:100%}
+  .stats{padding:10px 28px;color:var(--muted);font-size:14px;border-bottom:1px solid var(--border);background:var(--panel2);width:100%}
   .reconcile{padding:14px 28px;border-bottom:1px solid var(--border);background:var(--panel);width:100%}
-  .reconcile h3{margin:0 0 8px;font-size:14px;color:var(--accent)}
+  .reconcile h3{margin:0 0 8px;font-size:18px;color:var(--accent)}
   .reconcile-grid{display:flex;gap:12px;flex-wrap:wrap}
   .ver-card{padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);min-width:180px}
-  .ver-card .ver-name{font-size:15px;font-weight:600;margin-bottom:4px}
-  .ver-card .ver-status{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap}
-  .ver-card .ver-count{font-size:24px;font-weight:700;margin:4px 0}
-  .ver-card .ver-label{font-size:11px;color:var(--muted)}
+  .ver-card .ver-name{font-size:18px;font-weight:600;margin-bottom:4px}
+  .ver-card .ver-status{font-size:13px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap}
+  .ver-card .ver-count{font-size:28px;font-weight:700;margin:4px 0}
+  .ver-card .ver-label{font-size:13px;color:var(--muted)}
   .ver-card.current{border-color:var(--s1)}
   .ver-card.current .ver-name{color:var(--s1)}
   .ver-card.target{border-color:var(--s3)}
   .ver-card.target .ver-name{color:var(--s3)}
-  .ver-card.future{border-color:var(--s6)}
-  .ver-card.future .ver-name{color:var(--s6)}
+  .ver-card.stable{border-color:var(--s4)}
+  .ver-card.stable .ver-name{color:var(--s4)}
+  .ver-card.latest{border-color:var(--s6)}
+  .ver-card.latest .ver-name{color:var(--s6)}
   .ver-card .open-count{color:var(--open)}
   .ver-card .fixed-count{color:var(--fixed)}
   main{padding:0 28px 60px}
   table{width:100%;border-collapse:collapse}
-  thead th{position:sticky;top:0;background:var(--panel);text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);z-index:10}
+  thead th{position:sticky;top:0;background:var(--panel);text-align:left;padding:10px 12px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);z-index:10}
   tbody td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
   tbody tr:hover{background:var(--panel)}
-  .status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+  .status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:13px;font-weight:600;white-space:nowrap}
   .status-open{background:rgba(218,54,51,.18);color:#ff7b72;border:1px solid rgba(218,54,51,.4)}
   .status-fixed{background:rgba(45,125,70,.18);color:#56d364;border:1px solid rgba(45,125,70,.4)}
   .status-closed{background:rgba(110,118,129,.18);color:#8b949e;border:1px solid rgba(110,118,129,.4)}
-  .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted)}
-  .foundin{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+  .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:var(--muted)}
+  .foundin{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px}
   .title{font-weight:500}
-  .summary{color:var(--muted);font-size:12px;margin-top:3px}
+  .summary{color:var(--muted);font-size:14px;margin-top:3px}
   .hidden{display:none}
   .empty{padding:40px;text-align:center;color:var(--muted)}
-  a.ico{color:var(--accent);text-decoration:none;font-size:11px}
+  a.ico{color:var(--accent);text-decoration:none;font-size:13px}
   a.ico:hover{text-decoration:underline}
-  .report-badge{font-size:10px;padding:1px 6px;border-radius:8px;background:rgba(218,54,51,.15);color:#ff7b72;border:1px solid rgba(218,54,51,.3)}
-  .impact{font-size:10px;font-weight:600;padding:2px 6px;border-radius:6px;margin-left:4px}
+  .report-badge{font-size:12px;padding:1px 6px;border-radius:8px;background:rgba(218,54,51,.15);color:#ff7b72;border:1px solid rgba(218,54,51,.3)}
+  .impact{font-size:12px;font-weight:600;padding:2px 6px;border-radius:6px;margin-left:4px}
   .impact-yes{background:rgba(218,54,51,.2);color:#ff7b72}
   .impact-maybe{background:rgba(212,167,44,.2);color:#e3b341}
-  footer{padding:14px 28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);width:100%}
+  footer{padding:14px 28px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);width:100%}
 
   /* Responsive: mobile-friendly layout */
   @media (max-width: 900px) {
@@ -99,39 +101,40 @@
     .controls { flex-direction: column; align-items: stretch; }
     .ctrl-group { flex: 1 1 100%; }
     .chip-row { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
-    table { font-size: 12px; }
+    table { font-size: 14px; }
     td, th { padding: 6px 8px; }
     .note { display: none; }
     .ver-card { flex: 1 1 100%; }
-    .summary { font-size: 11px; }
-    .env { font-size: 11px; }
-    .sub { font-size: 12px; }
+    .summary { font-size: 13px; }
+    .env { font-size: 13px; }
+    .sub { font-size: 14px; }
   }
-    .navbar{position:static !important}
-    .controls{flex-direction:column;align-items:stretch}
-    .ctrl-group{flex:1 1 100%}
-    .chip-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
-    table{font-size:12px}
-    td,th{padding:6px 8px}
-    .note{display:none}
-    .ver-card{flex:1 1 100%}
-    .summary{font-size:11px}
-  }
+  .card-action{display:block;width:100%;text-align:left;background:transparent;border:0;color:inherit;cursor:pointer;padding:0;font:inherit}
+  .count-action{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:5px 8px;margin:3px 3px 0 0;cursor:pointer;font:inherit;font-size:13px}
+  .count-action:hover,.card-action:hover{color:var(--accent)}
+  .ver-card.selected{outline:2px solid var(--accent);outline-offset:2px}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .status-unknown{background:rgba(212,167,44,.18);color:#e3b341;border:1px solid rgba(212,167,44,.4)}
+  .reconcile-note{font-size:14px;color:var(--muted);margin:0 0 12px}
 </style>
 </head>
 <body>
 <div class="navbar">
   <a href="index.html">Resolved Issues</a>
   <a href="known-issues.html" class="active">Known Issues</a>
+  <a href="admin.html">Admin</a>
+  <a href="versions.html">Versions</a>
 </div>
 <header>
   <h1>Known Issues — Version Reconciliation</h1>
   <p class="sub">Open and fixed known issues from Salesforce Help, reconciled against your current version (<b id="cur"></b>) and target versions. Identify unresolved issues that could block a version upgrade.</p>
   <p class="env" id="env"></p>
+  <p class="env" style="margin-top:2px">Data updated: <b id="dataGen" style="color:var(--fixed)"></b></p>
 </header>
 
 <div class="reconcile" id="reconcile">
   <h3>Version Impact Summary</h3>
+  <p class="reconcile-note">Click a version to see active issues, or a count to see that status. Counts follow search and release filters. Bug impact carries forward unless a fix is verified; security impact uses published version ranges.</p>
   <div class="reconcile-grid" id="reconcileGrid"></div>
 </div>
 
@@ -140,18 +143,16 @@
   <div class="ctrl-group">
     <label>Status</label>
     <div class="chip-row" id="statusGroup">
-      <span class="chip statusChip st-open active" data-status="open">Open</span>
-      <span class="chip statusChip st-fixed" data-status="fixed">Fixed</span>
-      <span class="chip statusChip st-closed" data-status="closed">Closed</span>
+      <button class="chip statusChip st-open active" data-status="open">Open / affected</button>
+      <button class="chip statusChip active" data-status="unknown">Needs verification</button>
+      <button class="chip statusChip st-fixed" data-status="fixed">Fixed in version</button>
+      <button class="chip statusChip st-closed" data-status="closed">Closed</button>
     </div>
   </div>
   <div class="ctrl-group">
     <label>Impact Filter</label>
     <div class="chip-row" id="impactGroup">
-      <span class="chip impactChip active" data-impact="all">All</span>
-      <span class="chip impactChip" data-impact="current">Affects Current (2025.1.7)</span>
-      <span class="chip impactChip" data-impact="target">Affects Target (2025.3)</span>
-      <span class="chip impactChip" data-impact="future">Affects Future (2026.2)</span>
+      <button class="chip impactChip active" data-impact="all">All</button>
     </div>
   </div>
   <div class="ctrl-group">
@@ -181,133 +182,15 @@
   <div class="empty hidden" id="empty">No issues match the current filters.</div>
 </main>
 <footer>
-  Source: help.salesforce.com/s/issues (Tableau Server category, 1001 known issues via Coveo API). "Found In Release" indicates where the issue was first reported; it may affect later versions unless marked fixed. Generated <span id="gen"></span>.
+  Sources: <a class="ico" href="https://help.salesforce.com/s/issues">Salesforce Help</a> and <a class="ico" href="https://nvd.nist.gov/">NVD security advisories</a> (<span id="kicount"></span> relevant issues). "Found In Release" indicates where the issue was first reported; it may affect later versions unless marked fixed.
 </footer>
 
+<script src="data/resolved-issues.js"></script>
 <script src="data/known-issues.js"></script>
-<script>
-let curStatuses=new Set(["open"]), curImpact="all", curVer="all", q="", curSort="reports";
-
-document.getElementById("cur").textContent=KI_CURRENT_VERSION;
-document.getElementById("env").textContent="⚙ Environment: "+ENV_NOTES;
-document.getElementById("gen").textContent=new Date().toISOString().slice(0,10);
-
-// Version comparison
-function verCmp(a,b){const pa=(a||"").split('.').map(n=>parseInt(n,10)||0);const pb=(b||"").split('.').map(n=>parseInt(n,10)||0);const m=Math.max(pa.length,pb.length);for(let i=0;i<m;i++){const da=pa[i]||0,db=pb[i]||0;if(da!==db)return da-db;}return 0;}
-
-// Determine if an issue affects a version range
-function affectsVersion(issue, prefix){
-  return issue.allVersions.some(v=>v.startsWith(prefix));
-}
-function getImpact(issue){
-  const impacts=[];
-  if(affectsVersion(issue,"2025.1")) impacts.push("current");
-  if(affectsVersion(issue,"2025.3")) impacts.push("target");
-  if(affectsVersion(issue,"2026.")) impacts.push("future");
-  return impacts;
-}
-
-// Build version dropdown
-const verSelect=document.getElementById("verSelect");
-const allVersions=[...new Set(KNOWN_ISSUES.flatMap(i=>i.allVersions))].sort(verCmp);
-allVersions.forEach(v=>{
-  const opt=document.createElement("option");
-  opt.value=v; opt.textContent=v;
-  verSelect.appendChild(opt);
-});
-verSelect.onchange=()=>{curVer=verSelect.value;render();};
-
-document.getElementById("sortSelect").onchange=e=>{curSort=e.target.value;render();};
-
-// Status chips (multi-select)
-document.querySelectorAll(".statusChip").forEach(c=>c.onclick=()=>{
-  const s=c.dataset.status;
-  if(curStatuses.has(s)){curStatuses.delete(s);c.classList.remove("active")}
-  else{curStatuses.add(s);c.classList.add("active")}
-  render();
-});
-
-// Impact chips
-document.querySelectorAll(".impactChip").forEach(c=>c.onclick=()=>{
-  document.querySelectorAll(".impactChip").forEach(x=>x.classList.remove("active"));
-  c.classList.add("active"); curImpact=c.dataset.impact; render();
-});
-
-document.getElementById("search").oninput=e=>{q=e.target.value.toLowerCase();render();};
-
-function render(){
-  const tb=document.getElementById("tbody"); tb.innerHTML="";
-  let filtered=KNOWN_ISSUES.filter(i=>{
-    if(!curStatuses.has(i.statusType)) return false;
-    if(curVer!=="all" && !i.allVersions.includes(curVer)) return false;
-    if(curImpact!=="all"){
-      const impacts=getImpact(i);
-      if(!impacts.includes(curImpact)) return false;
-    }
-    if(q && !(i.title.toLowerCase().includes(q)||i.summary.toLowerCase().includes(q)||i.id.toLowerCase().includes(q))) return false;
-    return true;
-  });
-
-  // Sort
-  if(curSort==="reports") filtered.sort((a,b)=>b.reports-a.reports);
-  else if(curSort==="updated") filtered.sort((a,b)=>b.updated-a.updated);
-  else if(curSort==="created") filtered.sort((a,b)=>b.created-a.created);
-  else if(curSort==="title") filtered.sort((a,b)=>a.title.localeCompare(b.title));
-
-  let shown=0;
-  filtered.forEach(i=>{
-    shown++;
-    const tr=document.createElement("tr");
-    const statusCls="status status-"+i.statusType;
-    const impacts=getImpact(i);
-    const impactHtml=impacts.map(im=>{
-      const labels={current:"Current",target:"Target",future:"Future"};
-      const cls=im==="current"?"impact-yes":(im==="target"?"impact-maybe":"impact-maybe");
-      return '<span class="impact '+cls+'">'+labels[im]+'</span>';
-    }).join("");
-    const reportBadge=i.reports>0?'<span class="report-badge">'+i.reports+' reports</span>':'';
-    tr.innerHTML='<td><span class="'+statusCls+'">'+i.status+'</span></td>'+
-      '<td><span class="foundin">'+(i.foundIn||'—')+'</span></td>'+
-      '<td><span class="id">'+i.name+'</span></td>'+
-      '<td><div class="title">'+i.title+'</div><div class="summary">'+(i.summary||'')+'</div>'+
-        '<a class="ico" href="'+i.url+'" target="_blank" rel="noopener">view issue</a> '+reportBadge+'</td>'+
-      '<td style="text-align:center">'+(i.reports||0)+'</td>'+
-      '<td>'+impactHtml+'</td>';
-    tb.appendChild(tr);
-  });
-
-  document.getElementById("empty").classList.toggle("hidden",shown>0);
-  document.getElementById("stats").textContent="Showing "+shown+" of "+KNOWN_ISSUES.length+" known issues.";
-}
-
-function renderReconcile(){
-  const grid=document.getElementById("reconcileGrid");
-  const versions=[
-    {prefix:"2025.1",label:"2025.1.x (Current)",cls:"current",version:KI_CURRENT_VERSION},
-    {prefix:"2025.3",label:"2025.3.x (Target)",cls:"target",version:"2025.3.8"},
-    {prefix:"2026.2",label:"2026.2.x (Future)",cls:"future",version:"2026.2.1"}
-  ];
-  grid.innerHTML="";
-  versions.forEach(v=>{
-    const all=KNOWN_ISSUES.filter(i=>affectsVersion(i,v.prefix));
-    const open=all.filter(i=>i.statusType==="open");
-    const fixed=all.filter(i=>i.statusType==="fixed");
-    const closed=all.filter(i=>i.statusType==="closed");
-    const card=document.createElement("div");
-    card.className="ver-card "+v.cls;
-    const openStatus=open.length>0?'<span class="ver-status status-open">'+open.length+' open</span>':'<span class="ver-status status-fixed">No open issues</span>';
-    card.innerHTML=
-      '<div class="ver-name">'+v.label+'</div>'+
-      '<div>'+openStatus+'</div>'+
-      '<div class="ver-count open-count">'+open.length+'</div>'+
-      '<div class="ver-label">open known issues</div>'+
-      '<div style="margin-top:6px"><span class="fixed-count" style="font-weight:600">'+fixed.length+' fixed</span> · <span style="color:var(--muted)">'+closed.length+' closed</span> · '+all.length+' total</div>';
-    grid.appendChild(card);
-  });
-}
-
-renderReconcile();
-render();
-</script>
+<script src="data/security-issues.js"></script>
+<script src="data/config.js"></script>
+<script src="data/releases.js"></script>
+<script src="js/radar.js"></script>
+<script src="js/known-issues.js"></script>
 </body>
 </html>

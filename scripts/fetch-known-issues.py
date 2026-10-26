@@ -24,6 +24,8 @@ import argparse
 import json
 import re
 import sys
+import os
+import html as html_lib
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -37,7 +39,7 @@ def get_coveo_token():
         headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'}
     )
     
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=45) as resp:
         html = resp.read().decode('utf-8', errors='replace')
     
     # The token is embedded in the page's JavaScript
@@ -83,7 +85,7 @@ def fetch_known_issues(token, category="Tableau Server"):
         )
         
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=60) as resp:
                 data = json.load(resp)
         except urllib.error.HTTPError as e:
             print(f"API error: {e.code} {e.reason}", file=sys.stderr)
@@ -104,12 +106,14 @@ def fetch_known_issues(token, category="Tableau Server"):
             status = raw.get('sfstatus__c', '') or 'Unknown'
             if status in ('In Review', 'Acknowledged', 'Solution in Progress'):
                 status_type = 'open'
-            elif status in ('Solution Deployed', 'Solution Scheduled', 'Solution Deploying'):
+            elif status == 'Solution Deployed':
                 status_type = 'fixed'
-            else:
+            elif status in ('Closed', 'No Fix', 'Not Reproducible', 'Duplicate'):
                 status_type = 'closed'
+            else:
+                status_type = 'open'
             
-            summary = re.sub(r'<[^>]+>', '', raw.get('sfsummary__c', '') or '')[:300]
+            summary = html_lib.unescape(re.sub(r'<[^>]+>', '', raw.get('sfsummary__c', '') or ''))[:500]
             
             all_issues.append({
                 'id': raw.get('sfid', ''),
@@ -137,51 +141,112 @@ def fetch_known_issues(token, category="Tableau Server"):
     return all_issues
 
 
-def filter_issues(issues, min_version):
-    """Filter to issues from min_version onwards, plus open issues from the same series."""
-    
-    def ver_num(v):
-        parts = (v or "").split('.')
-        try:
-            return tuple(int(p) for p in parts)
-        except:
-            return (0,)
-    
-    min_ver = ver_num(min_version)
-    series_prefix = '.'.join(min_version.split('.')[:2])
-    
-    filtered = []
-    for issue in issues:
-        versions = issue['allVersions']
-        if not versions:
-            continue
-        
-        has_modern = any(ver_num(v) >= min_ver or v.startswith('2025.3') or v.startswith('2026') for v in versions)
-        if has_modern:
-            filtered.append(issue)
-            continue
-        
-        # Keep open issues from the current series even if found before min_version
-        is_early = all(v.startswith(series_prefix) and ver_num(v) < min_ver for v in versions) and any(v.startswith(series_prefix) for v in versions)
-        if is_early and issue['statusType'] == 'open':
-            filtered.append(issue)
-    
-    return filtered
+def load_server_versions(path):
+    """Extract the set of Server release versions from the resolved-issues data file."""
+    try:
+        text = Path(path).read_text()
+    except OSError:
+        return None
+    return set(re.findall(r'v:"(\d+(?:\.\d+)+)"', text))
 
 
-def generate_js(issues, output_path, current_version, env_notes):
+def filter_issues(issues, min_version, server_versions=None):
+    """Preserve the Server-category source evidence; scope in the dashboard.
+
+    Arguments retained for compatibility with existing refresh commands.
+    """
+    # Salesforce's Server category is the scope, not an incomplete list of
+    # releases that happen to contain fixes. Preserve old and unspecified
+    # found-in evidence: open issues may still affect the installed build.
+    # The dashboard scopes history using current settings at read time.
+    return issues
+
+
+def _ver_num(v):
+    """Numeric comparison key for dotted version strings."""
+    try:
+        return tuple(int(p) for p in v.split('.'))
+    except (ValueError, AttributeError):
+        return (0,)
+
+
+def latest_by_series(versions, min_series=None):
+    """Newest version within each series; optionally only series at or above min_series."""
+    floor = _ver_num(min_series) if min_series else None
+    by_series = {}
+    for v in versions:
+        series = '.'.join(v.split('.')[:2])
+        if floor is not None and _ver_num(series) < floor:
+            continue
+        by_series[series] = max(by_series.get(series, '0'), v, key=_ver_num)
+    return by_series
+
+
+def _target_ladder(by_series, current_version):
+    """First the latest patch of the current series (the upgrade target), then
+    the latest patch of each later series (stable and latest releases)."""
+    current_series = '.'.join(current_version.split('.')[:2])
+    targets = []
+    for series in sorted(by_series, key=_ver_num):
+        latest = by_series[series]
+        if _ver_num(series) > _ver_num(current_series) or _ver_num(latest) > _ver_num(current_version):
+            targets.append(latest)
+    return targets
+
+
+def derive_target_versions(issues, current_version):
+    """Milestone versions from the current version forward."""
+    versions = [v for issue in issues for v in issue['allVersions']]
+    return _target_ladder(latest_by_series(versions, '.'.join(current_version.split('.')[:2])), current_version)
+
+
+def derive_targets_from_server(server_versions, current_version):
+    """Milestone ladder from the scraped Server release list."""
+    return _target_ladder(latest_by_series(server_versions, '.'.join(current_version.split('.')[:2])), current_version)
+
+
+def build_milestones(target_versions, server_versions, current_version):
+    """Attach roles to the milestone ladder: target (current series patch),
+    stable (newest series at patch .4+), latest (final entry), future (other)."""
+    stable_series = None
+    if server_versions:
+        by_series = latest_by_series(server_versions)
+        stable = [s for s, v in by_series.items()
+                  if (int(v.split('.')[2]) if len(v.split('.')) > 2 else 0) >= 4]
+        stable_series = max(stable, key=_ver_num) if stable else None
+
+    current_series = '.'.join(current_version.split('.')[:2])
+    milestones = []
+    for idx, v in enumerate(target_versions):
+        series = '.'.join(v.split('.')[:2])
+        if series == current_series:
+            role = 'target'
+        elif stable_series and series == stable_series:
+            role = 'stable'
+        elif idx == len(target_versions) - 1:
+            role = 'latest'
+        else:
+            role = 'future'
+        milestones.append({'role': role, 'version': v})
+    return milestones
+
+
+def generate_js(issues, output_path, current_version, env_notes, target_versions, milestones):
     """Generate the JS data file."""
     js_data = json.dumps(issues, ensure_ascii=True, indent=2)
+    gen_date = __import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     
     output = f"""// Known Issues data — sourced from Salesforce Help (help.salesforce.com/s/issues)
-// {len(issues)} Tableau Server known issues (filtered to {current_version}+)
-// Generated: {__import__('datetime').datetime.now().strftime('%Y-%m-%d')}
+// {len(issues)} Tableau Server known issues (full found-in evidence retained)
+// Generated: {gen_date}
 
 const KNOWN_ISSUES = {js_data};
 
 const KI_CURRENT_VERSION = "{current_version}";
-const KI_TARGET_VERSIONS = ["2025.3.8", "2026.2.1"];
-const ENV_NOTES = "{env_notes}";
+const KI_TARGET_VERSIONS = {json.dumps(target_versions)};
+const KI_MILESTONES = {json.dumps(milestones)};
+const KI_ENV_NOTES = {json.dumps(env_notes)};
+const KI_GENERATED = "{gen_date}";
 """
     
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -192,19 +257,40 @@ const ENV_NOTES = "{env_notes}";
 def main():
     parser = argparse.ArgumentParser(description='Fetch Tableau Server known issues from Salesforce Help')
     parser.add_argument('--output', default='data/known-issues.js', help='Output JS file path')
-    parser.add_argument('--min-version', default='2025.1.7', help='Minimum version to include')
+    parser.add_argument('--min-version', default='2025.3', help='Minimum version to include (series or full version)')
+    parser.add_argument('--current-version', default=None, help='Current version recorded in the data file (defaults to --min-version)')
+    parser.add_argument('--target-versions', default='auto', help='Comma-separated target versions, or "auto" to derive the latest version of each series above the current one')
+    parser.add_argument('--resolved-data', default='data/resolved-issues.js', help='Resolved-issues data file used as the source of truth for Server versions (empty string to disable)')
     parser.add_argument('--category', default='Tableau Server', help='Salesforce category filter')
     parser.add_argument('--env-notes', default='Update with your environment details.', help='Environment notes string')
+    parser.add_argument('--token', default=None, help='Coveo access token. When omitted, the script tries to extract one from the page HTML; if that fails, load help.salesforce.com/s/issues in a browser, run any search, and copy the access_token query parameter from a platform.cloud.coveo.com request (see docs/RUNBOOK.md).')
     args = parser.parse_args()
-    
-    token = get_coveo_token()
+
+    token = args.token or os.environ.get('KI_TOKEN') or get_coveo_token()
     issues = fetch_known_issues(token, args.category)
+    if not issues or any(not i['id'] or not i['title'] for i in issues):
+        raise ValueError('Missing known issue data or required fields; existing data retained.')
+    if len({i['id'] for i in issues}) != len(issues):
+        raise ValueError('Duplicate known issue IDs; existing data retained.')
     print(f"\nFetched {len(issues)} total issues", file=sys.stderr)
     
-    filtered = filter_issues(issues, args.min_version)
-    print(f"Filtered to {len(filtered)} issues (>= {args.min_version} + open from current series)", file=sys.stderr)
+    current_version = args.current_version or args.min_version
+    server_versions = load_server_versions(args.resolved_data) if args.resolved_data else None
+    if server_versions:
+        print(f"Loaded {len(server_versions)} Server versions from {args.resolved_data}", file=sys.stderr)
+    filtered = filter_issues(issues, args.min_version, server_versions)
+    print(f"Preserved {len(filtered)} Server-category issues, including older/unversioned evidence", file=sys.stderr)
     
-    generate_js(filtered, args.output, args.min_version, args.env_notes)
+    if args.target_versions == 'auto':
+        if server_versions:
+            target_versions = derive_targets_from_server(server_versions, current_version)
+        else:
+            target_versions = derive_target_versions(filtered, current_version)
+    else:
+        target_versions = [v.strip() for v in args.target_versions.split(',') if v.strip()]
+
+    milestones = build_milestones(target_versions, server_versions, current_version)
+    generate_js(filtered, args.output, current_version, args.env_notes, target_versions, milestones)
 
 
 if __name__ == '__main__':

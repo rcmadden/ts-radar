@@ -36,11 +36,11 @@ function assert(condition, message) {
 // ---- Test resolved-issues data ----
 console.log('\n=== Resolved Issues Data ===');
 
-let ISSUES, CURRENT_VERSION, LATEST_VERSION, ENV_NOTES;
+let ISSUES, CURRENT_VERSION, LATEST_VERSION, ENV_NOTES, DATA_GENERATED;
 try {
   const js = fs.readFileSync(path.join(ROOT, 'data/resolved-issues.js'), 'utf8');
-  const mod = new Function(js + '; return {ISSUES, CURRENT_VERSION, LATEST_VERSION, ENV_NOTES};');
-  ({ ISSUES, CURRENT_VERSION, LATEST_VERSION, ENV_NOTES } = mod());
+  const mod = new Function(js + '; return {ISSUES, CURRENT_VERSION, LATEST_VERSION, ENV_NOTES, DATA_GENERATED};');
+  ({ ISSUES, CURRENT_VERSION, LATEST_VERSION, ENV_NOTES, DATA_GENERATED } = mod());
   assert(true, 'data/resolved-issues.js parses');
 } catch (e) {
   assert(false, `data/resolved-issues.js parses: ${e.message}`);
@@ -48,6 +48,7 @@ try {
 }
 
 assert(Array.isArray(ISSUES) && ISSUES.length > 0, `ISSUES is non-empty array (${ISSUES.length} issues)`);
+assert(typeof DATA_GENERATED === 'string' && /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}Z)?$/.test(DATA_GENERATED), `Resolved data has generation date (${DATA_GENERATED})`);
 
 const VALID_SEVS = ['critical', 'high', 'mod', 'low', 'excluded'];
 const VALID_TAGS = ['perf','render','down','extract','conn','auth','meta','upg','ops','ui','flow','cloud'];
@@ -86,18 +87,22 @@ function verCmp(a, b) {
 }
 const versions = [...new Set(ISSUES.map(i => i.v))].sort(verCmp);
 assert(versions.length > 0, `Has ${versions.length} unique versions`);
-const v8 = versions.indexOf('2025.1.8');
-const v10 = versions.indexOf('2025.1.10');
-assert(v8 >= 0 && v10 >= 0 && v8 < v10, 'Version sort: 2025.1.8 before 2025.1.10');
+for (let i = 0; i < versions.length - 1; i++) {
+  assert(verCmp(versions[i], versions[i + 1]) < 0, `Version sort: ${versions[i]} before ${versions[i + 1]}`);
+}
+
+// Keep historical releases for upgrade/rollback and vulnerability checks.
+const resolvedVersions=[...new Set(ISSUES.map(i=>i.v))];
+assert(resolvedVersions.includes(LATEST_VERSION), `Latest ${LATEST_VERSION} present in resolved data`);
 
 // ---- Test known-issues data ----
 console.log('\n=== Known Issues Data ===');
 
-let KNOWN_ISSUES, KI_CURRENT_VERSION;
+let KNOWN_ISSUES, KI_CURRENT_VERSION, KI_TARGET_VERSIONS, KI_MILESTONES, KI_GENERATED;
 try {
   const js = fs.readFileSync(path.join(ROOT, 'data/known-issues.js'), 'utf8');
-  const mod = new Function(js + '; return {KNOWN_ISSUES, KI_CURRENT_VERSION};');
-  ({ KNOWN_ISSUES, KI_CURRENT_VERSION } = mod());
+  const mod = new Function(js + '; return {KNOWN_ISSUES, KI_CURRENT_VERSION, KI_TARGET_VERSIONS, KI_MILESTONES, KI_GENERATED};');
+  ({ KNOWN_ISSUES, KI_CURRENT_VERSION, KI_TARGET_VERSIONS, KI_MILESTONES, KI_GENERATED } = mod());
   assert(true, 'data/known-issues.js parses');
 } catch (e) {
   assert(false, `data/known-issues.js parses: ${e.message}`);
@@ -105,6 +110,7 @@ try {
 }
 
 assert(Array.isArray(KNOWN_ISSUES) && KNOWN_ISSUES.length > 0, `KNOWN_ISSUES is non-empty array (${KNOWN_ISSUES.length} issues)`);
+assert(typeof KI_GENERATED === 'string' && /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}Z)?$/.test(KI_GENERATED), `KI data has generation date (${KI_GENERATED})`);
 
 const VALID_STATUS_TYPES = ['open', 'fixed', 'closed'];
 
@@ -116,12 +122,15 @@ KNOWN_ISSUES.forEach((i, idx) => {
   assert(typeof i.url === 'string' && i.url.startsWith('http'), `KI ${i.id}: has valid url`);
 });
 
-// Known issues should be filtered (no pre-2025.1 issues)
-const pre2025 = KNOWN_ISSUES.filter(i => 
-  i.allVersions.length > 0 && 
-  i.allVersions.every(v => !v.startsWith('2025.') && !v.startsWith('2026.'))
-);
-assert(pre2025.length === 0, `No pre-2025.1 issues in filtered data (found ${pre2025.length})`);
+// Preserve historical found-in evidence. Both dashboards scope at read time.
+const Radar=require('../js/radar');
+const config=new Function(fs.readFileSync(path.join(ROOT,'data/config.js'),'utf8')+';return RADAR_CONFIG')();
+const releases=new Function(fs.readFileSync(path.join(ROOT,'data/releases.js'),'utf8')+';return SERVER_RELEASES')();
+const ladder=Radar.milestones(config.currentVersion,releases);
+assert(ladder[0].version===config.currentVersion,'Shared current version used');
+assert(ladder.every(m=>Radar.compare(m.version,config.currentVersion)>=0),'Milestones never precede current');
+const kiIDs=new Set();
+KNOWN_ISSUES.forEach(i=>{assert(!kiIDs.has(i.id),`Unique known issue ${i.id}`);kiIDs.add(i.id);});
 
 // ---- Test reconcile math ----
 console.log('\n=== Reconcile Math ===');
@@ -130,7 +139,7 @@ function affectsVersion(issue, prefix) {
   return issue.allVersions.some(v => v.startsWith(prefix));
 }
 
-const seriesPrefixes = ['2025.1', '2025.3', '2026.2'];
+const seriesPrefixes = [...new Set(KNOWN_ISSUES.flatMap(i => i.allVersions.map(v => v.split('.').slice(0, 2).join('.'))))].sort();
 seriesPrefixes.forEach(prefix => {
   const all = KNOWN_ISSUES.filter(i => affectsVersion(i, prefix));
   const open = all.filter(i => i.statusType === 'open').length;
@@ -162,10 +171,15 @@ assert(kiHtml.includes('id="reconcileGrid"'), 'known-issues.html: has reconcile 
 assert(kiHtml.includes('@media'), 'known-issues.html: has responsive CSS');
 assert(kiHtml.includes('index.html'), 'known-issues.html: links to index.html');
 
+// versions.html
+const versionsHtml = fs.readFileSync(path.join(ROOT, 'versions.html'), 'utf8');
+assert(versionsHtml.includes('<script src="data/versions.js"></script>'), 'versions.html references versions.js');
+assert(versionsHtml.includes('index.html'), 'versions.html: links to index.html');
+
 // ---- Test responsive CSS ----
 console.log('\n=== Responsive CSS ===');
 
-for (const [name, html] of [['index.html', indexHtml], ['known-issues.html', kiHtml]]) {
+for (const [name, html] of [['index.html', indexHtml], ['known-issues.html', kiHtml], ['versions.html', versionsHtml]]) {
   // All full-width elements should have mobile padding overrides
   assert(html.includes('@media (max-width: 900px)'), `${name}: has 900px breakpoint`);
   assert(html.includes('@media (max-width: 600px)'), `${name}: has 600px breakpoint`);
@@ -194,7 +208,7 @@ for (const [name, html] of [['index.html', indexHtml], ['known-issues.html', kiH
   
   // No nested or broken script tags
   assert(!html.match(/<script[^>]*><script/), `${name}: no nested script tags`);
-  assert(!html.match(/<script[^>]*><\/script>\s*<script[^>]*><\/script>/), `${name}: no empty consecutive script tags`);
+  assert(!html.match(/<script(?![^>]*\bsrc=)[^>]*><\/script>\s*<script(?![^>]*\bsrc=)[^>]*><\/script>/), `${name}: no empty consecutive script tags`);
 }
 
 // ---- Summary ----
@@ -247,6 +261,8 @@ console.log('\n=== Navbar Consistency ===');
 assert(indexHtml.includes('.navbar{') && kiHtml.includes('.navbar{'), 'Both pages have .navbar CSS class');
 assert(indexHtml.includes('class="navbar"') && kiHtml.includes('class="navbar"'), 'Both pages use class="navbar"');
 assert(indexHtml.includes('href="known-issues.html"') && kiHtml.includes('href="index.html"'), 'Both pages link to each other');
+assert(indexHtml.includes('href="versions.html"') && kiHtml.includes('href="versions.html"'), 'Dashboards link to versions.html');
+assert(versionsHtml.includes('href="index.html"') && versionsHtml.includes('href="known-issues.html"'), 'versions.html links to both dashboards');
 
 // ---- Summary ----
 console.log('\n=== Results: ' + passed + ' passed, ' + failed + ' failed ===');

@@ -9,82 +9,90 @@
     --bg:#0f1419; --panel:#161b22; --panel2:#1c232e; --border:#2a323d;
     --text:#e6edf3; --muted:#8b949e; --accent:#4f9cf9; --accent2:#2d7d46;
     --crit:#da3633; --high:#e8743c; --mod:#d4a72c; --low:#6e7681; --excl:#3b4047;
-    --s1:#4f9cf9; --s3:#a371f7;
+    --s1:#4f9cf9; --s2:#39c5cf; --s3:#a371f7; --s4:#f778ba;
     --navbar-h:43px;
     --controls-h:80px;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:18px;line-height:1.5}
   .navbar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--panel2);position:sticky;top:0;z-index:30;width:100%}
-  .navbar a{padding:10px 20px;font-size:13px;text-decoration:none;white-space:nowrap}
+  .navbar a{padding:10px 20px;font-size:16px;text-decoration:none;white-space:nowrap}
   .navbar a.active{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
   .navbar a:not(.active){color:var(--muted)}
   header{padding:18px 28px;border-bottom:1px solid var(--border);background:var(--panel);width:100%}
-  h1{margin:0 0 4px;font-size:20px;font-weight:600}
-  .sub{color:var(--muted);font-size:13px;margin:0}
-  .env{color:var(--accent);font-size:12px;margin-top:6px}
+  h1{margin:0 0 4px;font-size:24px;font-weight:600}
+  .sub{color:var(--muted);font-size:16px;margin:0}
+  .env{color:var(--accent);font-size:14px;margin-top:6px}
   .topbar{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
-  .btn{padding:7px 14px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:13px;cursor:pointer;transition:all .12s;white-space:nowrap}
+  .btn{padding:8px 16px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:16px;cursor:pointer;transition:all .12s;white-space:nowrap}
   .btn:hover{background:rgba(79,156,249,.12)}
   .btn.danger{border-color:var(--crit);color:#ff7b72}
   .btn.danger:hover{background:rgba(218,54,51,.12)}
 
   .controls{padding:14px 28px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;position:sticky;top:var(--navbar-h);z-index:15;width:100%}
   .ctrl-group{display:flex;flex-direction:column;gap:5px}
-  .ctrl-group>label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-  .search{padding:7px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;min-width:260px}
+  .ctrl-group>label{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .search{padding:7px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;min-width:260px}
   .search:focus{outline:none;border-color:var(--accent)}
-  select{padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;cursor:pointer}
+  select{padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;cursor:pointer}
   select:focus{outline:none;border-color:var(--accent)}
   .chip-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
-  .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;border:1px solid var(--border);background:var(--panel2);color:var(--muted);font-size:12px;cursor:pointer;user-select:none;transition:all .12s;line-height:1.3}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel2);color:var(--muted);font-size:14px;cursor:pointer;user-select:none;transition:all .12s;line-height:1.3}
   .chip:hover{border-color:var(--accent);color:var(--text)}
   .chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .chip.series-2025_1.active{background:var(--s1);border-color:var(--s1)}
-  .chip.series-2025_3.active{background:var(--s3);border-color:var(--s3)}
+  .chip.series-c0.active{background:var(--s3);border-color:var(--s3)}
+  .chip.series-c1.active{background:var(--s2);border-color:var(--s2)}
+  .chip.series-c2.active{background:var(--s4);border-color:var(--s4)}
+  .chip.series-c3.active{background:var(--s1);border-color:var(--s1)}
   .sevchip-critical.active{background:var(--crit);border-color:var(--crit)}
   .sevchip-high.active{background:var(--high);border-color:var(--high)}
   .sevchip-mod.active{background:var(--mod);border-color:var(--mod);color:#1a1a1a}
   .sevchip-low.active{background:var(--low);border-color:var(--low)}
   .sevchip-excluded.active{background:var(--excl);border-color:var(--excl)}
   .tagchip.active{background:var(--accent2);border-color:var(--accent2)}
-  .stats{padding:10px 28px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border);background:var(--panel2);width:100%}
+  .stats{padding:10px 28px;color:var(--muted);font-size:14px;border-bottom:1px solid var(--border);background:var(--panel2);width:100%}
   main{padding:0 28px 60px}
   table{width:100%;border-collapse:collapse}
-  thead th{position:sticky;top:calc(var(--navbar-h) + var(--controls-h));background:var(--panel);text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);z-index:10}
+  thead th{position:sticky;top:calc(var(--navbar-h) + var(--controls-h));background:var(--panel);text-align:left;padding:10px 12px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);z-index:10}
   tbody td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
   tbody tr:hover{background:var(--panel)}
-  .sev{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+  .sev{display:inline-block;padding:2px 8px;border-radius:10px;font-size:13px;font-weight:600;white-space:nowrap}
   .sev-critical{background:rgba(218,54,51,.18);color:#ff7b72;border:1px solid rgba(218,54,51,.4)}
   .sev-high{background:rgba(232,116,60,.18);color:#ffa657;border:1px solid rgba(232,116,60,.4)}
   .sev-mod{background:rgba(212,167,44,.18);color:#e3b341;border:1px solid rgba(212,167,44,.4)}
   .sev-low{background:rgba(110,118,129,.18);color:#8b949e;border:1px solid rgba(110,118,129,.4)}
   .sev-excluded{background:rgba(59,64,71,.3);color:#6e7681;border:1px solid rgba(59,64,71,.5)}
-  .ver{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:nowrap}
-  .ver-2025_1{color:var(--s1)}
-  .ver-2025_3{color:var(--s3)}
-  .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted)}
-  .tag{display:inline-block;padding:1px 7px;margin:1px 2px 1px 0;border-radius:8px;font-size:10px;background:var(--panel2);border:1px solid var(--border);color:var(--muted)}
+  .ver{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;white-space:nowrap}
+  .ver-c0{color:var(--s3)}
+  .ver-c1{color:var(--s2)}
+  .ver-c2{color:var(--s4)}
+  .ver-c3{color:var(--s1)}
+  .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:var(--muted)}
+  .tag{display:inline-block;padding:1px 7px;margin:1px 2px 1px 0;border-radius:8px;font-size:12px;background:var(--panel2);border:1px solid var(--border);color:var(--muted)}
   .title{font-weight:500}
-  .note{color:var(--muted);font-size:12px;margin-top:3px}
+  .note{color:var(--muted);font-size:14px;margin-top:3px}
   .hidden{display:none}
   .empty{padding:40px;text-align:center;color:var(--muted)}
-  .new{font-size:10px;color:var(--accent2);margin-left:6px}
+  .new{font-size:12px;color:var(--accent2);margin-left:6px}
+  .tlink{cursor:pointer;border-bottom:1px dashed currentColor}
+  .tlink.active{border-bottom-style:solid;background:rgba(88,166,255,.22);border-radius:3px;padding:0 3px}
   .rowexcluded{opacity:.5}
-  a.ico{color:var(--accent);text-decoration:none;font-size:11px}
+  a.ico{color:var(--accent);text-decoration:none;font-size:13px}
   a.ico:hover{text-decoration:underline}
-  .seriesbadge{font-size:10px;padding:1px 6px;border-radius:8px;margin-left:5px;font-weight:600}
-  .sb-2025_1{background:rgba(79,156,249,.15);color:var(--s1)}
-  .sb-2025_3{background:rgba(163,113,247,.15);color:var(--s3)}
-  footer{padding:14px 28px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);width:100%}
+  .seriesbadge{font-size:12px;padding:1px 6px;border-radius:8px;margin-left:5px;font-weight:600}
+  .sb-c0{background:rgba(163,113,247,.15);color:var(--s3)}
+  .sb-c1{background:rgba(57,197,207,.15);color:var(--s2)}
+  .sb-c2{background:rgba(247,120,186,.15);color:var(--s4)}
+  .sb-c3{background:rgba(79,156,249,.15);color:var(--s1)}
+  footer{padding:14px 28px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);width:100%}
 
   /* Exclusions modal */
   .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:100;display:none;justify-content:center;align-items:flex-start;padding:40px 20px;overflow-y:auto}
   .modal-overlay.show{display:flex}
   .modal{background:var(--panel);border:1px solid var(--border);border-radius:10px;width:100%;max-width:1000px;max-height:85vh;display:flex;flex-direction:column}
   .modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-  .modal-header h2{margin:0;font-size:17px}
-  .modal-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:0 4px}
+  .modal-header h2{margin:0;font-size:20px}
+  .modal-close{background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;padding:0 4px}
   .modal-close:hover{color:var(--text)}
   .modal-body{overflow-y:auto;padding:16px 20px;flex:1}
   .modal-controls{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
@@ -93,10 +101,10 @@
   .excl-item:hover{background:var(--panel2)}
   .excl-item input[type=checkbox]{margin-top:3px;flex-shrink:0;width:16px;height:16px;cursor:pointer;accent-color:var(--crit)}
   .excl-item .excl-info{flex:1;min-width:0}
-  .excl-item .excl-title{font-size:13px;font-weight:500}
-  .excl-item .excl-meta{font-size:11px;color:var(--muted);margin-top:2px}
-  .excl-count{font-size:12px;color:var(--muted)}
-  .excl-group-header{font-size:13px;font-weight:600;color:var(--accent);margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:1}
+  .excl-item .excl-title{font-size:16px;font-weight:500}
+  .excl-item .excl-meta{font-size:13px;color:var(--muted);margin-top:2px}
+  .excl-count{font-size:14px;color:var(--muted)}
+  .excl-group-header{font-size:16px;font-weight:600;color:var(--accent);margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:1}
   .excl-group-header:first-child{margin-top:0}
 
   /* Responsive: mobile-friendly layout */
@@ -121,22 +129,12 @@
     .controls { flex-direction: column; align-items: stretch; }
     .ctrl-group { flex: 1 1 100%; }
     .chip-row { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
-    table { font-size: 12px; }
+    table { font-size: 14px; }
     td, th { padding: 6px 8px; }
     .note { display: none; }
-    .summary { font-size: 11px; }
-    .env { font-size: 11px; }
-    .sub { font-size: 12px; }
-  }
-    .navbar{position:static !important}
-    .controls{flex-direction:column;align-items:stretch}
-    .ctrl-group{flex:1 1 100%}
-    .chip-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
-    table{font-size:12px}
-    td,th{padding:6px 8px}
-    .note{display:none}
-    .ver-card{flex:1 1 100%}
-    .summary{font-size:11px}
+    .summary { font-size: 13px; }
+    .env { font-size: 13px; }
+    .sub { font-size: 14px; }
   }
 </style>
 </head>
@@ -144,15 +142,18 @@
 <div class="navbar">
   <a href="index.html" class="active">Resolved Issues</a>
   <a href="known-issues.html">Known Issues</a>
+  <a href="admin.html">Admin</a>
+  <a href="versions.html">Versions</a>
 </div>
 <header>
   <h1>Tableau Server — Release Gap Dashboard</h1>
-  <p class="sub">Resolved issues from <b id="cur"></b> → latest <b id="latest"></b>. <span style="color:var(--s1)">2025.1</span> (current) · <span style="color:var(--s3)">2025.3</span> (migration target).</p>
+  <p class="sub">Resolved issues from <b id="cur"></b> → <span id="milestones"></span>.</p>
   <p class="env" id="env"></p>
+  <p class="env" style="margin-top:2px">Data updated: <b id="dataGen" style="color:var(--accent2)"></b></p>
   <div class="topbar">
     <button class="btn" id="manageExclBtn">Manage Exclusions</button>
     <button class="btn danger" id="resetExclBtn">Reset to Defaults</button>
-    <span style="font-size:12px;color:var(--muted)" id="exclSummary"></span>
+    <span style="font-size:14px;color:var(--muted)" id="exclSummary"></span>
   </div>
 </header>
 
@@ -162,8 +163,6 @@
     <label>Series</label>
     <div class="chip-row" id="seriesGroup">
       <span class="chip seriesChip active" data-series="all">All</span>
-      <span class="chip seriesChip series-2025_1" data-series="2025.1">2025.1</span>
-      <span class="chip seriesChip series-2025_3" data-series="2025.3">2025.3</span>
     </div>
   </div>
   <div class="ctrl-group">
@@ -199,7 +198,7 @@
   <div class="empty hidden" id="empty">No issues match the current filters.</div>
 </main>
 <footer>
-  Source: tableau.com/support/releases/server. Flow/Prep and Cloud-only issues excluded by default — use "Manage Exclusions" to customize. Exclusion preferences saved locally. Generated <span id="gen"></span>.
+  Source: tableau.com/support/releases/server. Flow/Prep and Cloud-only issues excluded by default — use "Manage Exclusions" to customize. Exclusion preferences saved locally.
 </footer>
 
 <!-- Exclusions Modal -->
@@ -219,37 +218,83 @@
       <div id="exclList"></div>
     </div>
     <div class="modal-footer">
-      <span style="font-size:12px;color:var(--muted)">Checked = excluded from dashboard. Changes save automatically.</span>
+      <span style="font-size:14px;color:var(--muted)">Checked = excluded from dashboard. Changes save automatically.</span>
       <button class="btn" id="doneBtn">Done</button>
     </div>
   </div>
 </div>
 
 <script src="data/resolved-issues.js"></script>
+<script src="data/config.js"></script>
+<script src="data/releases.js"></script>
+<script src="js/radar.js"></script>
 <script>
+(async()=>{
+const config=await Radar.loadState();
+Radar.watchState(config);
+const currentVersion=config.currentVersion||CURRENT_VERSION;
 const SEV_LABEL={critical:"Critical",high:"High",mod:"Moderate",low:"Low",excluded:"Excluded"};
 const SEV_ORDER=["critical","high","mod","low","excluded"];
 const TAG_LABEL={render:"Render",perf:"Perf",down:"Downtime",extract:"Extract",conn:"Connect",auth:"Auth",meta:"Lineage",upg:"Upgrade",ops:"Ops",ui:"UI",flow:"Flow",cloud:"Cloud"};
 const TAG_ORDER=["perf","render","down","extract","conn","auth","meta","upg","ops","ui","flow","cloud"];
 
-let curSev="all", curVer="all", curSeries="all", activeTags=new Set(), q="";
+let curSev="all", curVer="all", curSeries="all", curTargetWindow=false, activeTags=new Set(), q="";
 let userExclusions=new Set(); // issue IDs the user has excluded
 let exclusionOverrides={}; // id -> true means user changed from default
 
-document.getElementById("cur").textContent=CURRENT_VERSION;
-document.getElementById("latest").textContent=LATEST_VERSION;
-document.getElementById("env").textContent="⚙ Environment: "+ENV_NOTES;
-document.getElementById("gen").textContent=new Date().toISOString().slice(0,10);
+document.getElementById("cur").textContent=currentVersion;
+document.getElementById("env").textContent="⚙ Environment: "+(config.envNotes||ENV_NOTES);
+document.getElementById("dataGen").textContent=Radar.fmtStamp(typeof DATA_GENERATED!=="undefined"?DATA_GENERATED:"");
 
+// Baseline: everything at or above the current series, through the latest
+// release. Bump CURRENT_VERSION in data/resolved-issues.js when upgrading and
+// older series drop out automatically.
+const CURRENT_SERIES=seriesOf(currentVersion);
+const VISIBLE_ISSUES=ISSUES.filter(i=>verCmp(seriesOf(i.v),CURRENT_SERIES)>=0);
+const SERIES_ORDER=[...new Set(VISIBLE_ISSUES.map(i=>seriesOf(i.v)))].sort(verCmp);
+const SERIES_COLOR=s=>"series-c"+SERIES_ORDER.indexOf(s);
+
+const ladder=Radar.milestones(currentVersion,SERVER_RELEASES);
+const TARGET_VERSION=ladder.find(m=>m.key==='target').version;
+const STABLE_VERSION=ladder.find(m=>m.key==='stable')?.version||null;
+const latestVersion=ladder.find(m=>m.key==='latest').version;
+const MILESTONES=ladder.filter(m=>m.key!=='current').map(m=>[m.key,m.version]);
+const MILESTONE_COLOR=["s3","s2","s4","s1"];
+const seriesColorVar=v=>"var(--"+(MILESTONE_COLOR[SERIES_ORDER.indexOf(seriesOf(v))]||"s1")+")";
+document.getElementById("milestones").innerHTML=MILESTONES.map(([k,v])=>{
+  const num='<b style="color:'+seriesColorVar(v)+'">'+v+'</b>';
+  return k==="target"
+    ? k+' <b id="targetLink" class="tlink" style="color:'+seriesColorVar(v)+'" title="Show issues between '+currentVersion+' and '+v+'">'+v+'</b>'
+    : k+" "+num;
+}).join(" · ");
+const targetLink=document.getElementById("targetLink");
+if(targetLink){
+  targetLink.onclick=()=>{
+    curTargetWindow=!curTargetWindow;
+    targetLink.classList.toggle("active",curTargetWindow);
+    render();
+  };
+}
+
+// Build series chips dynamically
+const seriesGroup=document.getElementById("seriesGroup");
+SERIES_ORDER.forEach(s=>{
+  const c=document.createElement("span");
+  c.className="chip seriesChip "+SERIES_COLOR(s);
+  c.dataset.series=s;
+  c.textContent=s;
+  seriesGroup.appendChild(c);
+});
+
+// Header series summary
 function seriesOf(v){ return v.split('.').slice(0,2).join('.'); }
 function vsortKey(v){ return v.split('.').map(n=>parseInt(n,10)||0); }
 function verCmp(a,b){ const pa=vsortKey(a),pb=vsortKey(b); const m=Math.max(pa.length,pb.length); for(let i=0;i<m;i++){const da=pa[i]||0,db=pb[i]||0; if(da!==db) return da-db;} return 0; }
 function verClass(v){ return "ver-"+seriesOf(v).replace(/\./g,'_'); }
 function releaseUrl(v){
-  if(v==='2025.1.17'||v==='2025.1.18') return 'https://www.tableau.com/support/releases/server/'+v+'-0';
   return 'https://www.tableau.com/support/releases/server/'+v;
 }
-function defaultExcluded(id){ return ISSUES.find(i=>i.id===id && i.sev==="excluded") ? true : false; }
+function defaultExcluded(id){ return VISIBLE_ISSUES.find(i=>i.id===id && i.sev==="excluded") ? true : false; }
 function isExcluded(id){ return exclusionOverrides.hasOwnProperty(id) ? exclusionOverrides[id] : defaultExcluded(id); }
 function effectiveSev(i){ return isExcluded(i.id) ? "excluded" : i.sev; }
 
@@ -274,13 +319,13 @@ TAG_ORDER.forEach(t=>{
 
 // Build version dropdown (sorted numerically)
 const verSelect=document.getElementById("verSelect");
-const allVersions=[...new Set(ISSUES.map(i=>i.v))].sort(verCmp);
+const allVersions=[...new Set(VISIBLE_ISSUES.map(i=>i.v))].sort(verCmp);
 let lastSeries="";
 allVersions.forEach(v=>{
   const s=seriesOf(v);
   if(s!==lastSeries){ const og=document.createElement("optgroup"); og.label=s; verSelect.appendChild(og); lastSeries=s; }
   const opt=document.createElement("option");
-  opt.value=v; opt.textContent=v+" ("+ISSUES.filter(i=>i.v===v).length+")";
+  opt.value=v; opt.textContent=v+" ("+VISIBLE_ISSUES.filter(i=>i.v===v).length+")";
   verSelect.querySelector("optgroup:last-child").appendChild(opt);
 });
 verSelect.onchange=()=>{ curVer=verSelect.value; render(); };
@@ -301,7 +346,7 @@ document.getElementById("search").oninput=e=>{q=e.target.value.toLowerCase();ren
 
 function render(){
   const tb=document.getElementById("tbody"); tb.innerHTML="";
-  const sorted=[...ISSUES].sort((a,b)=>verCmp(a.v,b.v));
+  const sorted=[...VISIBLE_ISSUES].sort((a,b)=>verCmp(a.v,b.v));
   let shown=0, totalInScope=0, totalExcl=0;
   sorted.forEach(i=>{
     const seff=effectiveSev(i);
@@ -309,6 +354,7 @@ function render(){
     if(curSev!=="all" && seff!==curSev) return;
     if(curVer!=="all" && i.v!==curVer) return;
     if(curSeries!=="all" && seriesOf(i.v)!==curSeries) return;
+    if(curTargetWindow && !(verCmp(i.v,currentVersion)>0 && verCmp(i.v,TARGET_VERSION)<=0)) return;
     if(activeTags.size>0 && !i.tags.some(t=>activeTags.has(t))) return;
     if(q && !(i.id.includes(q)||i.title.toLowerCase().includes(q)||(i.note||"").toLowerCase().includes(q))) return;
     shown++;
@@ -318,18 +364,21 @@ function render(){
     const tagsHtml=i.tags.map(t=>'<span class="tag">'+(TAG_LABEL[t]||t)+'</span>').join("");
     const sCls="sb-"+seriesOf(i.v).replace(/\./g,'_');
     const sBadge=curSeries==="all" ? '<span class="seriesbadge '+sCls+'">'+seriesOf(i.v)+'</span>' : '';
-    const isNew = i.v===LATEST_VERSION ? '<span class="new">LATEST</span>' : '';
+    const milestoneName=i.v===TARGET_VERSION?"TARGET":(i.v===STABLE_VERSION?"STABLE":(i.v===latestVersion?"LATEST":null));
+    const isNew = milestoneName ? '<span class="new">'+milestoneName+'</span>' : '';
     tr.innerHTML='<td><span class="'+sevCls+'">'+SEV_LABEL[seff]+'</span></td>'+
-      '<td><span class="ver '+verClass(i.v)+'">'+i.v+'</span>'+sBadge+'<br><span style="font-size:10px;color:var(--muted)">'+i.date+'</span></td>'+
+      '<td><span class="ver '+verClass(i.v)+'">'+i.v+'</span>'+sBadge+'<br><span style="font-size:12px;color:var(--muted)">'+i.date+'</span></td>'+
       '<td><span class="id">'+i.id+'</span>'+isNew+'</td>'+
-      '<td><div class="title">'+i.title+'</div><div class="note">'+(i.note||"")+'</div>'+
+      '<td><div class="title">'+Radar.escape(i.title)+'</div><div class="note">'+Radar.escape(i.note||"")+'</div>'+
         '<a class="ico" href="'+releaseUrl(i.v)+'" target="_blank" rel="noopener">release page</a></td>'+
       '<td>'+tagsHtml+'</td>';
     tb.appendChild(tr);
   });
   document.getElementById("empty").classList.toggle("hidden",shown>0);
   document.getElementById("stats").textContent=
-    "Showing "+shown+" of "+ISSUES.length+" issues — "+totalInScope+" in-scope, "+totalExcl+" excluded.";
+    "Showing "+shown+" of "+VISIBLE_ISSUES.length+" issues"
+    +(curTargetWindow?" in window "+currentVersion+" → "+TARGET_VERSION:"")
+    +" — "+totalInScope+" in-scope, "+totalExcl+" excluded.";
   document.getElementById("exclSummary").textContent=
     totalExcl+" excluded (customizable)";
 }
@@ -339,7 +388,7 @@ function renderExclModal(filterStr){
   const list=document.getElementById("exclList");
   list.innerHTML="";
   const fq=(filterStr||"").toLowerCase();
-  const sorted=[...ISSUES].sort((a,b)=>verCmp(a.v,b.v));
+  const sorted=[...VISIBLE_ISSUES].sort((a,b)=>verCmp(a.v,b.v));
   let lastVer="", count=0;
   sorted.forEach(i=>{
     if(fq && !(i.id.includes(fq)||i.title.toLowerCase().includes(fq))) return;
@@ -347,7 +396,7 @@ function renderExclModal(filterStr){
     if(i.v!==lastVer){
       const h=document.createElement("div");
       h.className="excl-group-header";
-      h.textContent=i.v+" ("+ISSUES.filter(x=>x.v===i.v).length+")";
+      h.textContent=i.v+" ("+VISIBLE_ISSUES.filter(x=>x.v===i.v).length+")";
       list.appendChild(h);
       lastVer=i.v;
     }
@@ -358,8 +407,8 @@ function renderExclModal(filterStr){
     item.innerHTML=
       '<input type="checkbox" data-id="'+i.id+'" '+checked+'>'+
       '<div class="excl-info">'+
-        '<div class="excl-title">'+i.title+'</div>'+
-        '<div class="excl-meta">'+i.id+' · '+i.v+' · ['+tagStr+']'+(i.note?' · '+i.note:'')+'</div>'+
+        '<div class="excl-title">'+Radar.escape(i.title)+'</div>'+
+        '<div class="excl-meta">'+i.id+' · '+i.v+' · ['+tagStr+']'+(i.note?' · '+Radar.escape(i.note):'')+'</div>'+
       '</div>';
     list.appendChild(item);
   });
@@ -378,7 +427,7 @@ function renderExclModal(filterStr){
 }
 
 function updateExclSummary(){
-  const total=ISSUES.filter(i=>isExcluded(i.id)).length;
+  const total=VISIBLE_ISSUES.filter(i=>isExcluded(i.id)).length;
   document.getElementById("exclSummary").textContent=total+" excluded (customizable)";
 }
 
@@ -410,6 +459,7 @@ document.getElementById("resetExclBtn").onclick=()=>{
 loadOverrides();
 updateExclSummary();
 render();
+})();
 </script>
 </body>
 </html>

@@ -23,7 +23,9 @@ Takes both data sources, normalizes them to real version numbers, and makes them
 | Page | Purpose | Data Source |
 |------|---------|-------------|
 | **Resolved Issues** (`index.html`) | Track bug fixes per release to assess what an upgrade would fix | tableau.com/support/releases/server |
-| **Known Issues** (`known-issues.html`) | Reconcile open/known issues against current and target versions to identify upgrade blockers | help.salesforce.com/s/issues |
+| **Known Issues** (`known-issues.html`) | Inspect version impact, active bugs, and vulnerabilities | Salesforce Help + NVD |
+| **Local Admin** (`admin.html`) | Set the installed version and refresh each data source | Local POC server |
+| **Versions** (`versions.html`) | App release history for users | `data/versions.js` |
 
 ### Resolved Issues
 - Filterable table across version series (2025.1, 2025.3, 2026.2, etc.)
@@ -43,14 +45,14 @@ Takes both data sources, normalizes them to real version numbers, and makes them
 
 ```bash
 # Serve locally
-python3 -m http.server 8000
+python3 scripts/serve.py --port 8765
 
 # Open:
-# http://localhost:8000/index.html        (Resolved Issues)
-# http://localhost:8000/known-issues.html  (Known Issues)
+# http://localhost:8765/index.html        (Resolved Issues)
+# http://localhost:8765/known-issues.html  (Known Issues)
 ```
 
-Works with any static file server, GitHub Pages, or DSMLP.
+Open http://localhost:8765/admin.html to save the current version or refresh data. The dashboards also work on a static server; Admin writes require the local server. DSMLP will require an authenticated admin backend before enabling writes.
 
 ## Project Structure
 
@@ -80,11 +82,15 @@ See `docs/RUNBOOK.md` for the full process. Summary:
 
 ## Environment Configuration
 
-Update these in `data/resolved-issues.js` and `data/known-issues.js`:
+`data/config.js` is the shared installation configuration for both dashboards.
+Use Admin to set `currentVersion`; edit `envNotes` there if topology changes.
+Target, stable, and latest are derived from `data/releases.js`, including
+releases with no resolved issues. Refreshes preserve previous data when a
+source fails and show separate source results. Salesforce may require an
+optional Coveo token when its public page does not embed one; Admin has a
+password field for a token used only for that refresh.
 
-- `CURRENT_VERSION` — your current Tableau Server version
-- `LATEST_VERSION` — latest release in the data
-- `ENV_NOTES` — your environment summary (topology, site count, features used)
+Run `npm ci && npm test` for data, impact, dashboard, and local API checks.
 
 ## Data Sources
 

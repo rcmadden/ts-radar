@@ -15,3 +15,7 @@ Thumbs.db
 # Temporary scraper output
 data/*-new.js
 /tmp/
+__pycache__/
+data/refresh-status.json
+data/*.tmp
+node_modules/

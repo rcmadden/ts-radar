@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau Radar — Versions</title>
+<style>
+  :root{--bg:#0f1419;--panel:#161b22;--panel2:#1c232e;--border:#2a323d;--text:#e6edf3;--muted:#8b949e;--accent:#4f9cf9;--accent2:#2d7d46}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:18px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .navbar{display:flex;background:var(--panel2);border-bottom:1px solid var(--border);width:100%}
+  .navbar a{padding:10px 20px;text-decoration:none;color:var(--muted);font-size:16px;white-space:nowrap}
+  .navbar a.active{color:var(--accent);font-weight:600;border-bottom:2px solid var(--accent)}
+  header,main{max-width:900px;margin:auto;padding:24px 28px;width:100%}
+  header{border-bottom:1px solid var(--border);background:var(--panel)}
+  h1{margin:0 0 4px;font-size:24px;font-weight:600}
+  .sub{margin:0;color:var(--muted);font-size:16px}
+  .release{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:24px;margin-top:22px}
+  .release.current{border-color:var(--accent)}
+  .release-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+  .release-head h2{margin:0;font-size:20px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .badge{padding:2px 10px;border-radius:10px;font-size:13px;font-weight:600}
+  .release.current .badge{background:rgba(79,156,249,.18);color:var(--accent);border:1px solid rgba(79,156,249,.4)}
+  .release.previous .badge{background:rgba(110,118,129,.18);color:var(--muted);border:1px solid rgba(110,118,129,.4)}
+  .date{color:var(--muted);font-size:14px}
+  .release ul{margin:12px 0 0;padding-left:20px}
+  .release li{margin-top:8px}
+  .release li:first-child{margin-top:0}
+  footer{max-width:900px;margin:auto;padding:10px 28px 50px;color:var(--muted);font-size:14px;width:100%}
+  @media (max-width: 900px){
+    .navbar{position: static}
+    header,main,footer{padding-left: 16px;padding-right: 16px}
+  }
+  @media (max-width: 600px){
+    .navbar{position: static}
+    header,main,footer{padding-left: 16px;padding-right: 16px}
+    .navbar a{padding:10px 12px;font-size:14px}
+    .release{padding:18px}
+    .release-head{flex-direction: column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html">Resolved Issues</a>
+  <a href="known-issues.html">Known Issues</a>
+  <a href="admin.html">Admin</a>
+  <a href="versions.html" class="active">Versions</a>
+</nav>
+<header>
+  <h1>Release History</h1>
+  <p class="sub">What changed in the Tableau Radar app, newest first. Update <code>data/versions.js</code> to add a release.</p>
+</header>
+<main id="releaseList" aria-label="App release history"></main>
+<footer>Dashboards: <a href="index.html">Resolved Issues</a> · <a href="known-issues.html">Known Issues</a> · <a href="admin.html">Admin</a></footer>
+<script src="data/versions.js"></script>
+<script>
+(function(){
+  const list=document.getElementById('releaseList');
+  APP_VERSIONS.forEach(function(release){
+    const card=document.createElement('article');
+    card.className='release '+release.status;
+    const head=document.createElement('div');head.className='release-head';
+    const name=document.createElement('h2');name.textContent=release.version;
+    const badge=document.createElement('span');badge.className='badge';
+    badge.textContent=release.status==='current'?'Current release':'Previous release';
+    const date=document.createElement('span');date.className='date';
+    date.textContent='Released '+release.released;
+    head.append(name,badge,date);
+    const ul=document.createElement('ul');
+    release.highlights.forEach(function(h){const li=document.createElement('li');li.textContent=h;ul.appendChild(li);});
+    card.append(head,ul);
+    list.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>

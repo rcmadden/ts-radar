@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau Radar — Before and After</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#161b22; --panel2:#1c232e; --border:#2a323d;
+    --text:#e6edf3; --muted:#8b949e; --accent:#4f9cf9; --accent2:#2d7d46;
+    --old:#a371f7; --new:#4f9cf9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:18px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  a{color:var(--accent)}
+  nav{display:flex;border-bottom:1px solid var(--border);background:var(--panel2)}
+  nav a{padding:12px 22px;color:var(--muted);text-decoration:none}
+  nav a:hover{color:var(--text)}
+  header,main{max-width:1400px;margin:auto;padding:30px 28px}
+  h1{margin:0;font-size:28px}
+  .sub{margin:8px 0 0;color:var(--muted)}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .meta span{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;color:var(--muted)}
+  .meta b{color:var(--text)}
+  .board{display:grid;grid-template-columns:minmax(220px,180px) 1fr 1fr;align-items:start}
+  .side-label{position:sticky;top:20px;font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding-top:8px}
+  .column-head{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding-top:8px}
+  .column-head h2{margin:0;border-bottom:3px solid;padding-bottom:8px;font-size:22px}
+  .column-head .before{color:var(--old);border-color:var(--old)}
+  .column-head .after{color:var(--new);border-color:var(--new)}
+  .row{display:grid;grid-template-columns:minmax(220px,180px) 1fr 1fr;gap:18px;margin-top:30px}
+  .row h3{margin:0;padding-top:8px;font-size:19px}
+  .row .side-label{position:static}
+  .cell{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px}
+  .cell.before{border-left:4px solid var(--old)}
+  .cell.after{border-left:4px solid var(--new)}
+  .cell ul{margin:0;padding-left:20px}
+  .cell li{margin-top:9px}
+  .cell li:first-child{margin-top:0}
+  .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .links a{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:7px 11px;font-size:14px;text-decoration:none}
+  .links a:hover{border-color:var(--accent);color:var(--text)}
+  .shots{margin-top:50px}
+  .shots h2{margin:0 0 16px;font-size:24px}
+  .shot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .shot{margin:0;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .shot img{display:block;width:100%;height:auto}
+  .shot figcaption{padding:10px 12px;font-size:14px;color:var(--muted);border-top:1px solid var(--border)}
+  code{font:14px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+  footer{max-width:1400px;margin:auto;padding:10px 28px 50px;color:var(--muted);font-size:14px}
+  @media(max-width:1000px){
+    header,main,footer{padding-left:18px;padding-right:18px}
+    .board{display:none}
+    .column-head{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .column-head h2{font-size:18px}
+    .row{grid-template-columns:1fr;gap:12px;margin-top:22px}
+    .row .side-label{padding-top:0}
+    .shot-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:620px){
+    body{font-size:16px}
+    header,main,footer{padding-left:14px;padding-right:14px}
+    nav{overflow-x:auto}
+    nav a{padding:10px 14px;white-space:nowrap}
+    .column-head{grid-template-columns:1fr}
+    .cell{padding:16px}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">Resolved Issues</a>
+  <a href="known-issues.html">Known Issues</a>
+  <a href="admin.html">Admin</a>
+  <a href="versions.html">Versions</a>
+  <a href="before-after.html">Before / After</a>
+</nav>
+
+<header>
+  <h1>Session Before &amp; After</h1>
+  <p class="sub">Side-by-side comparison of the tagged release and the current local working tree.</p>
+  <div class="meta">
+    <span>Before: <b>site-v0.1.0</b> · 2 dashboards · 197 known issues</span>
+    <span>After: <b>site-v0.2.0</b> · 2 dashboards + admin · 1,077 known issues · 25 advisories</span>
+    <span>Review status: <b>TritonAI autoreview clean</b></span>
+  </div>
+</header>
+
+<main aria-label="Before and after comparison">
+  <div class="column-head">
+    <h2 class="before">Before</h2>
+    <h2 class="after">After</h2>
+  </div>
+
+  <section class="row" aria-labelledby="features-label">
+    <h2 class="side-label" id="features-label">Features</h2>
+    <div class="cell before">
+      <ul>
+        <li>Resolved-issues dashboard with manual series, severity, tag, version, and exclusion filters.</li>
+        <li>Known-issues dashboard with hardcoded current, target, and future version cards.</li>
+        <li>Static exclusion preferences saved in the browser.</li>
+      </ul>
+    </div>
+    <div class="cell after">
+      <ul>
+        <li>The same two dashboards, expanded around a shared version model and release catalog.</li>
+        <li>Version impact cards now count affected, needs-verification, fixed, and closed issues.</li>
+        <li>NVD security advisories are reconciled into the known-issues view, with vendor advisories preserved.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="row" aria-labelledby="ui-label">
+    <h2 class="side-label" id="ui-label">UI fixes</h2>
+    <div class="cell before">
+      <ul>
+        <li>Dense 14px typography and small controls made scanning difficult.</li>
+        <li>Duplicate responsive CSS blocks created inconsistent sticky and mobile behavior.</li>
+        <li>The two-page navigation had no common admin destination.</li>
+      </ul>
+    </div>
+    <div class="cell after">
+      <ul>
+        <li>Raised the base text and controls to an 18px system for easier reading.</li>
+        <li>Normalized full-width bars, sticky stacking, navbar spacing, and responsive padding.</li>
+        <li>Replaced decorative version/count labels with focusable buttons and visible focus states.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="row" aria-labelledby="dynamic-label">
+    <h2 class="side-label" id="dynamic-label">Dynamic enhancements</h2>
+    <div class="cell before">
+      <ul>
+        <li>Version roles and impact filters were hardcoded to 2025.1, 2025.3, and 2026.2.</li>
+        <li>Each dashboard maintained its own comparison and impact logic.</li>
+        <li>Changing version context required editing generated data.</li>
+      </ul>
+    </div>
+    <div class="cell after">
+      <ul>
+        <li>Shared version logic derives target, stable, and latest milestones from the release catalog.</li>
+        <li>Series chips and impact cards regenerate from the installed version and current datasets.</li>
+        <li>Changing the installed version synchronizes both dashboards and refreshes stale views.</li>
+        <li>Validated source refreshes preserve the previous dataset when a source fails.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="row" aria-labelledby="admin-label">
+    <h2 class="side-label" id="admin-label">Admin page</h2>
+    <div class="cell before">
+      <ul>
+        <li>No admin page, local server API, or refresh workflow.</li>
+      </ul>
+    </div>
+    <div class="cell after">
+      <ul>
+        <li>Local Admin sets the installed Tableau Server version from release-aware suggestions.</li>
+        <li>Shows current, target, stable, and latest milestones plus last-successful data timestamps.</li>
+        <li>Refreshes resolved, known, and security sources with per-source status and failure retention.</li>
+        <li>Supports optional Salesforce and admin tokens without saving them in the page.</li>
+      </ul>
+      <div class="links">
+        <a href="http://localhost:8765/admin.html">Open current Admin</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="shots" aria-labelledby="shots-label">
+    <h2 id="shots-label">Screenshots</h2>
+    <div class="shot-grid">
+      <figure class="shot">
+        <img src="assets/before-after/before-resolved.png" alt="Before resolved issues dashboard with manual filters and small text" loading="lazy">
+        <figcaption>Before — Resolved Issues</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/before-after/after-resolved.png" alt="After resolved issues dashboard with release catalog and larger controls" loading="lazy">
+        <figcaption>After — Resolved Issues</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/before-after/before-known.png" alt="Before known issues dashboard with three version cards" loading="lazy">
+        <figcaption>Before — Known Issues</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/before-after/after-known.png" alt="After known issues dashboard with four dynamic version cards and security reconciliation" loading="lazy">
+        <figcaption>After — Known Issues</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/before-after/before-admin.png" alt="Before state with no admin page and a 404 response" loading="lazy">
+        <figcaption>Before — No Admin page</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/before-after/after-admin.png" alt="After admin page with version settings and data refresh controls" loading="lazy">
+        <figcaption>After — Local Admin</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Before state: <code>site-v0.1.0</code>. After state: <code>site-v0.2.0</code>. This page is part of the after snapshot.
+</footer>
+</body>
+</html>

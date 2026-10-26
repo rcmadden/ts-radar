@@ -1,0 +1,11 @@
+{
+  "name": "ts-radar",
+  "private": true,
+  "scripts": {
+    "start": "python3 scripts/serve.py --port 8765",
+    "test": "node tests/test.js && node tests/impact.test.js && node tests/ui.test.js && python3 tests/server_test.py"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

@@ -57,8 +57,8 @@ async function load(page,current='2025.3.8',fixture=false){
   const admin=await load('admin.html');assert.equal(admin.window.document.querySelector('#currentVersion').value,'2025.3.8');
   assert.equal(admin.window.document.querySelector('#saveVersion').disabled,false);admin.window.close();
   const versions=await load('versions.html');const versionsDoc=versions.window.document;
-  assert.equal(versionsDoc.querySelectorAll('.release').length,2);
-  assert(versionsDoc.querySelector('.release.current h2').textContent.startsWith('site-v0.2.0'));
+  assert.equal(versionsDoc.querySelectorAll('.release').length,3);
+  assert(versionsDoc.querySelector('.release.current h2').textContent.startsWith('site-v0.2.1'));
   assert(versionsDoc.querySelector('.release.previous .badge').textContent.includes('Previous release'));
   versions.window.close();
   console.log('Dashboard DOM checks passed: card counts, search, version upgrades, security boundary, admin');

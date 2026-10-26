@@ -3,9 +3,18 @@
 // and keep the previous entry's status as "previous".
 const APP_VERSIONS = [
   {
-    version: "site-v0.2.0",
+    version: "site-v0.2.1",
     released: "2026-10-26",
     status: "current",
+    highlights: [
+      "Versions page footer now links to GitHub issues for reporting a site problem and to the README describing the site.",
+      "Removed the developer-facing release instructions from the versions page."
+    ]
+  },
+  {
+    version: "site-v0.2.0",
+    released: "2026-10-26",
+    status: "previous",
     highlights: [
       "Version milestones (current, target, stable, latest) now derive from a Server release catalog instead of hardcoded versions, and both dashboards follow the installed version set in Admin.",
       "New Local Admin page sets the installed version and refreshes release, known-issue, and security data; each source is validated and a failed source keeps its previous data.",
